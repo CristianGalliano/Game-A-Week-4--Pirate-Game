@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82316b7012bc8154581a5f2fa1624bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 0.025
+  movementSpeed: 1
   myCam: {fileID: 407}
   myAL: {fileID: 526}
 --- !u!212 &539
@@ -459,7 +459,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 179030984533672394}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
