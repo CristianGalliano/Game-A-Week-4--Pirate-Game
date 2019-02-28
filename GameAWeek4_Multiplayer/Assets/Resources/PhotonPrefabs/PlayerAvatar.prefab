@@ -87,7 +87,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82316b7012bc8154581a5f2fa1624bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 1
+  movementSpeed: 0.8
+  rotSpeed: 1
+  dragCoefficient: 0.1
+  angularDragCoefficient: 0.5
   myCam: {fileID: 407}
   myAL: {fileID: 526}
 --- !u!212 &539
@@ -152,13 +155,13 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!60 &5937893801306144142
 PolygonCollider2D:
   m_ObjectHideFlags: 0

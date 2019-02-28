@@ -6,10 +6,17 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float movementSpeed;
-    private float rot;
+    public float rotSpeed;
+    private float rotSpeedPriv;
+    public float dragCoefficient;
+    public float angularDragCoefficient;
     private PhotonView PV;
+    private Vector3 currentRotation;
+    private Rigidbody2D rb;
+
 
     private Vector3 newPos;
+    private Quaternion newRot;
 
     public Camera myCam;
     public AudioListener myAL;
@@ -19,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         PV = GetComponent<PhotonView>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
         if (!PV.IsMine)
         {
             Destroy(myCam);
@@ -39,24 +47,30 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W))
         {
-            newPos = new Vector3(transform.position.x, transform.position.y + movementSpeed, transform.position.z);
-            transform.position = newPos;
+            rb.AddRelativeForce(new Vector2(0, movementSpeed));
         }
         if (Input.GetKey(KeyCode.A))
         {
-            newPos = new Vector3(transform.position.x - movementSpeed, transform.position.y, transform.position.z);
-            transform.position = newPos;
+            rotSpeedPriv = rotSpeed * rb.velocity.magnitude;
+            rb.AddTorque(rotSpeedPriv);
+            /*currentRotation = gameObject.transform.eulerAngles;
+            transform.rotation = Quaternion.Euler(0, 0, currentRotation.z + rotSpeed * rb.velocity.magnitude);*/
         }
         if (Input.GetKey(KeyCode.S))
         {
-            newPos = new Vector3(transform.position.x, transform.position.y - movementSpeed, transform.position.z);
-            transform.position = newPos;
+            rb.AddRelativeForce(new Vector2(0, -movementSpeed));
+            /*newPos = new Vector3(transform.position.x, transform.position.y - movementSpeed, transform.position.z);
+            transform.position = newPos;*/
         }
         if (Input.GetKey(KeyCode.D))
         {
-            newPos = new Vector3(transform.position.x + movementSpeed, transform.position.y, transform.position.z);
-            transform.position = newPos;
+            rotSpeedPriv = rotSpeed * rb.velocity.magnitude;
+            rb.AddTorque(-rotSpeedPriv);
+            /*currentRotation = gameObject.transform.eulerAngles;
+            transform.rotation = Quaternion.Euler(0, 0, currentRotation.z - rotSpeed * rb.velocity.magnitude);*/
         }
+        rb.drag = Mathf.Abs(rb.velocity.magnitude * dragCoefficient);
+        rb.angularDrag = Mathf.Abs(rb.angularVelocity * angularDragCoefficient);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
