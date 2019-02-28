@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -21,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     public Camera myCam;
     public AudioListener myAL;
 
-    public GameObject cannonBall;
+    private GameObject cannonBall;
 
     private bool shot = false;
     private int ID; 
@@ -52,7 +53,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Instantiate(cannonBall, transform.position, Quaternion.identity, gameObject.transform);
+            cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), transform.position, Quaternion.identity);
+            cannonBall.transform.parent = gameObject.transform;
             shot = true;
         }
         if (Input.GetKey(KeyCode.W))
