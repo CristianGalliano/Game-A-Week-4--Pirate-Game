@@ -93,6 +93,8 @@ MonoBehaviour:
   angularDragCoefficient: 0.5
   myCam: {fileID: 407}
   myAL: {fileID: 526}
+  cannonBall: {fileID: 7181611754594898297, guid: 0baeb0804d5409748974f3d558e0ac70,
+    type: 3}
 --- !u!212 &539
 SpriteRenderer:
   m_ObjectHideFlags: 0

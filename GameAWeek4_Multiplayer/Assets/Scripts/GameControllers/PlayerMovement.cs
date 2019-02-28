@@ -21,6 +21,11 @@ public class PlayerMovement : MonoBehaviour
     public Camera myCam;
     public AudioListener myAL;
 
+    public GameObject cannonBall;
+
+    private bool shot = false;
+    private int ID; 
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         if (PV.IsMine)
         {
@@ -45,6 +50,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void BasicMovement()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Instantiate(cannonBall, transform.position, Quaternion.identity, gameObject.transform);
+            shot = true;
+        }
         if (Input.GetKey(KeyCode.W))
         {
             rb.AddRelativeForce(new Vector2(0, movementSpeed));
@@ -75,6 +85,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        PhotonNetwork.Destroy(gameObject);
+        if (collision.collider.tag == "Land")
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
     }
 }
