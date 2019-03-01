@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 276}
   - component: {fileID: 595}
   - component: {fileID: 596}
-  - component: {fileID: 592}
+  - component: {fileID: 591}
   - component: {fileID: 555}
   - component: {fileID: 531}
   - component: {fileID: 538}
+  - component: {fileID: 628}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Untagged
@@ -59,6 +60,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 596}
+  - {fileID: 628}
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
@@ -77,7 +79,7 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
---- !u!114 &592
+--- !u!114 &591
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -306,6 +308,22 @@ PolygonCollider2D:
       - {x: 0.26872963, y: 1.9617263}
       - {x: 0.26872963, y: 1.2972312}
       - {x: -0.26872963, y: 1.2972312}
+--- !u!114 &628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7cb724808c322458aa4d15f5035fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &126
 GameObject:
   m_ObjectHideFlags: 0
@@ -700,13 +718,25 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   ObservedComponents:
-  - {fileID: 600}
+  - {fileID: 627}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d69ecd5c14fa87428019388401f2032, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &627
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -721,18 +751,6 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
---- !u!114 &627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d69ecd5c14fa87428019388401f2032, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &129
 GameObject:
   m_ObjectHideFlags: 0
