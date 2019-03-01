@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public float initialHealth;
+    private float health;
+    public float landDamageMultiplier;
+    public float landBounceMultiplier;
     public float movementSpeed;
     public float rotSpeed;
     private float rotSpeedPriv;
@@ -35,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     {
         PV = GetComponent<PhotonView>();
         rb = gameObject.GetComponent<Rigidbody2D>();
+        health = initialHealth;
         if (!PV.IsMine)
         {
             Destroy(myCam);
@@ -91,6 +96,17 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.tag == "Land")
+        {
+            DealDamage(rb.velocity.magnitude * landDamageMultiplier);
+            rb.AddForce(-rb.velocity * landBounceMultiplier);
+        }
+    }
+
+    private void DealDamage(float damage)
+    {
+        Debug.Log(health + " - " + damage + " = " + (health - damage));
+        health -= damage;
+        if (health <= 0)
         {
             PhotonNetwork.Destroy(gameObject);
         }
