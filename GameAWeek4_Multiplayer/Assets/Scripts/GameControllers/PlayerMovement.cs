@@ -27,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     private bool shot = false;
     private int ID; 
 
+    public float localForwardVelocity;
+
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +53,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void BasicMovement()
     {
+        rb.drag = Mathf.Abs(rb.velocity.magnitude * dragCoefficient);
+        rb.angularDrag = Mathf.Abs(rb.angularVelocity * angularDragCoefficient);
+        localForwardVelocity = Vector3.Dot(rb.velocity, transform.up);
         if (Input.GetMouseButtonDown(0))
         {
             cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), transform.position, Quaternion.identity);
@@ -63,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.A))
         {
-            rotSpeedPriv = rotSpeed * rb.velocity.magnitude;
+            rotSpeedPriv = rotSpeed * localForwardVelocity;
             rb.AddTorque(rotSpeedPriv);
             /*currentRotation = gameObject.transform.eulerAngles;
             transform.rotation = Quaternion.Euler(0, 0, currentRotation.z + rotSpeed * rb.velocity.magnitude);*/
@@ -76,13 +81,11 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.D))
         {
-            rotSpeedPriv = rotSpeed * rb.velocity.magnitude;
+            rotSpeedPriv = rotSpeed * localForwardVelocity;
             rb.AddTorque(-rotSpeedPriv);
             /*currentRotation = gameObject.transform.eulerAngles;
             transform.rotation = Quaternion.Euler(0, 0, currentRotation.z - rotSpeed * rb.velocity.magnitude);*/
         }
-        rb.drag = Mathf.Abs(rb.velocity.magnitude * dragCoefficient);
-        rb.angularDrag = Mathf.Abs(rb.angularVelocity * angularDragCoefficient);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

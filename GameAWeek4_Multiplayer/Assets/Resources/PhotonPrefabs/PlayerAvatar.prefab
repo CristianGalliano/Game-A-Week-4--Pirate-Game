@@ -90,9 +90,10 @@ MonoBehaviour:
   movementSpeed: 0.8
   rotSpeed: 1
   dragCoefficient: 0.1
-  angularDragCoefficient: 0.5
+  angularDragCoefficient: 0.4
   myCam: {fileID: 415}
   myAL: {fileID: 537}
+  localForwardVelocity: 0
 --- !u!212 &550
 SpriteRenderer:
   m_ObjectHideFlags: 0

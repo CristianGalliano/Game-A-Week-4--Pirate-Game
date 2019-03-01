@@ -12,6 +12,7 @@ public class CannonBallScript : MonoBehaviour
     private Vector3 direction;
     private Rigidbody2D rb;
     public float speed;
+    public float stopSpeed;
     private Camera cam;
 
     // Start is called before the first frame update
@@ -24,7 +25,10 @@ public class CannonBallScript : MonoBehaviour
             rb = gameObject.GetComponent<Rigidbody2D>();
             originalPos = transform.position;
             mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+            originalPos = new Vector3(originalPos.x, originalPos.y, 0);
+            mousePos = new Vector3(mousePos.x, mousePos.y, 0);
             direction = Vector3.Normalize(mousePos - originalPos);
+            Debug.Log(direction);
             gameObject.transform.parent = null;
             CannonBallMovement();
         }
@@ -33,5 +37,11 @@ public class CannonBallScript : MonoBehaviour
     private void CannonBallMovement()
     {
         rb.AddForce(direction * speed);
+    }
+
+    void FixedUpdate()
+    {
+        if (rb.velocity.magnitude < stopSpeed && rb.velocity.magnitude != 0)
+            Destroy(gameObject);
     }
 }
