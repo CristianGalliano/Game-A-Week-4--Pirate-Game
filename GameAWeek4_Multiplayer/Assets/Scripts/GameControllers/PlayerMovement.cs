@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private GameObject cannonBall;
 
     private bool shot = false;
-    private int ID; 
+    private int ID;
 
     public float localForwardVelocity;
 
@@ -97,11 +97,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.collider.tag == "Land")
         {
-            DealDamage(rb.velocity.magnitude * landDamageMultiplier);
-            rb.AddForce(-rb.velocity * landBounceMultiplier);
+            if (PV.IsMine)
+            {
+                DealDamage(rb.velocity.magnitude * landDamageMultiplier);
+                rb.AddForce(-rb.velocity * landBounceMultiplier);
+            }
         }
     }
 
+    [PunRPC]
     private void DealDamage(float damage)
     {
         Debug.Log(health + " - " + damage + " = " + (health - damage));

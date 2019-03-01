@@ -41,7 +41,10 @@ public class CannonBallScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (rb.velocity.magnitude < stopSpeed && rb.velocity.magnitude != 0)
-            Destroy(gameObject);
+        if (PV.IsMine)
+        {
+            if (rb.velocity.magnitude < stopSpeed && rb.velocity.magnitude != 0)
+                PhotonNetwork.Destroy(gameObject);
+        }
     }
 }
