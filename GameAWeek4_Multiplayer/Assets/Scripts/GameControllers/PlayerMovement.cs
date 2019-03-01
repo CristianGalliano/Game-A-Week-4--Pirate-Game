@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     public float landBounceMultiplier;
     public float cannonballDamageMultiplier;
     public float cannonballBounceMultiplier;
+    public float boatDamageMultiplier;
+    public float boatBounceMultiplier;
     public float movementSpeed;
     public float rotSpeed;
     private float rotSpeedPriv;
@@ -121,6 +123,14 @@ public class PlayerMovement : MonoBehaviour
             PV.RPC("RPC_AddForce", RpcTarget.All,(cannonBallRB.velocity * cannonballBounceMultiplier));
             Debug.Log("test");
             PhotonNetwork.Destroy(cannonBallRB.gameObject);
+        }
+        if (collision.collider.tag == "Boat")
+        {
+            if (PV.IsMine)
+            {
+                PV.RPC("DealDamage", RpcTarget.All, (rb.velocity.magnitude * boatDamageMultiplier));
+                PV.RPC("RPC_AddForce", RpcTarget.All, (-rb.velocity * boatBounceMultiplier));
+            }
         }
     }
 
