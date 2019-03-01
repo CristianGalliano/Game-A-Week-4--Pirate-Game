@@ -35,5 +35,8 @@ MonoBehaviour:
   - RPC_CreatePlayer
   - RPC_LoadedGameScene
   - DealDamage
+  - KnockBack
+  - RPC_AddForce
+  - RPC_AddRelativeForce
   DisableAutoOpenWizard: 1
   ShowSettings: 1

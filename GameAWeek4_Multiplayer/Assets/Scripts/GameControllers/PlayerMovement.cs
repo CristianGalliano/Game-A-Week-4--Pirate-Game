@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,9 +8,11 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float initialHealth;
-    private float health;
+    public float health;
     public float landDamageMultiplier;
     public float landBounceMultiplier;
+    public float cannonballDamageMultiplier;
+    public float cannonballBounceMultiplier;
     public float movementSpeed;
     public float rotSpeed;
     private float rotSpeedPriv;
@@ -18,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     private PhotonView PV;
     private Vector3 currentRotation;
     private Rigidbody2D rb;
+    public GameObject[] cannonballSpawns;
 
 
     private Vector3 newPos;
@@ -33,6 +37,8 @@ public class PlayerMovement : MonoBehaviour
 
     public float localForwardVelocity;
 
+    public PolygonCollider2D limiter;
+
 
     // Start is called before the first frame update
     void Start()
@@ -41,9 +47,10 @@ public class PlayerMovement : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         health = initialHealth;
         if (!PV.IsMine)
-        {
+        {    
             Destroy(myCam);
             Destroy(myAL);
+            
         }
     }
 
@@ -63,7 +70,17 @@ public class PlayerMovement : MonoBehaviour
         localForwardVelocity = Vector3.Dot(rb.velocity, transform.up);
         if (Input.GetMouseButtonDown(0))
         {
-            cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), transform.position, Quaternion.identity);
+            Vector3 mousePos = myCam.ScreenToWorldPoint(Input.mousePosition);
+            mousePos = new Vector3(mousePos.x, mousePos.y, 0);
+
+            if (Vector2.Distance(mousePos, cannonballSpawns[0].transform.position) < Vector2.Distance(mousePos, cannonballSpawns[1].transform.position))
+            {
+                cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[0].transform.position, Quaternion.identity);
+            }
+            else
+            {
+                cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[1].transform.position, Quaternion.identity);
+            }
             cannonBall.transform.parent = gameObject.transform;
             shot = true;
         }
@@ -75,21 +92,15 @@ public class PlayerMovement : MonoBehaviour
         {
             rotSpeedPriv = rotSpeed * localForwardVelocity;
             rb.AddTorque(rotSpeedPriv);
-            /*currentRotation = gameObject.transform.eulerAngles;
-            transform.rotation = Quaternion.Euler(0, 0, currentRotation.z + rotSpeed * rb.velocity.magnitude);*/
         }
         if (Input.GetKey(KeyCode.S))
         {
             rb.AddRelativeForce(new Vector2(0, -movementSpeed));
-            /*newPos = new Vector3(transform.position.x, transform.position.y - movementSpeed, transform.position.z);
-            transform.position = newPos;*/
         }
         if (Input.GetKey(KeyCode.D))
         {
             rotSpeedPriv = rotSpeed * localForwardVelocity;
             rb.AddTorque(-rotSpeedPriv);
-            /*currentRotation = gameObject.transform.eulerAngles;
-            transform.rotation = Quaternion.Euler(0, 0, currentRotation.z - rotSpeed * rb.velocity.magnitude);*/
         }
     }
 
@@ -99,9 +110,17 @@ public class PlayerMovement : MonoBehaviour
         {
             if (PV.IsMine)
             {
-                DealDamage(rb.velocity.magnitude * landDamageMultiplier);
-                rb.AddForce(-rb.velocity * landBounceMultiplier);
+                PV.RPC("DealDamage", RpcTarget.All,(rb.velocity.magnitude * landDamageMultiplier));
+                PV.RPC("RPC_AddForce", RpcTarget.All,(-rb.velocity * landBounceMultiplier));
             }
+        }
+        if (collision.collider.tag == "CannonBall")
+        {
+            Rigidbody2D cannonBallRB = collision.collider.GetComponent<Rigidbody2D>();
+            PV.RPC("DealDamage",RpcTarget.All,(cannonBallRB.velocity.magnitude * cannonballDamageMultiplier));
+            PV.RPC("RPC_AddForce", RpcTarget.All,(cannonBallRB.velocity * cannonballBounceMultiplier));
+            Debug.Log("test");
+            PhotonNetwork.Destroy(cannonBallRB.gameObject);
         }
     }
 
@@ -114,5 +133,11 @@ public class PlayerMovement : MonoBehaviour
         {
             PhotonNetwork.Destroy(gameObject);
         }
+    }
+
+    [PunRPC]
+    private void RPC_AddForce(Vector2 force)
+    {
+        rb.AddForce(force);
     }
 }

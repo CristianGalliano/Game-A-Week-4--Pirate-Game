@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Land
   - CannonBall
+  - limiter
   layers:
   - Default
   - TransparentFX
