@@ -51,12 +51,22 @@ public class CannonBallScript : MonoBehaviour
         if (PV.IsMine)
         {
             if (rb.velocity.magnitude > highestSpeed)
-                highestSpeed = rb.velocity.magnitude;
-            PV.RPC("cannonBallShrink", RpcTarget.All);
+                highestSpeed = rb.velocity.magnitude;           
             if (rb.velocity.magnitude < stopSpeed && rb.velocity.magnitude != 0)
             {
                 PhotonNetwork.Destroy(gameObject);
             }
+        }
+        Vector3 newScale = Vector3.Lerp(Vector3.zero, Vector3.one, Mathf.Sin((Mathf.PI / 2) * (rb.velocity.magnitude / highestSpeed)));
+        if (float.IsNaN(newScale.x) || float.IsNaN(newScale.y) || float.IsNaN(newScale.z))
+        {
+            transform.localScale = Vector3.one;
+        }
+        else
+        {
+            Debug.Log(newScale);
+            transform.localScale = new Vector3(newScale.x, newScale.y, 1);
+            //transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, rb.velocity.magnitude / highestSpeed);
         }
     }
 
@@ -82,21 +92,5 @@ public class CannonBallScript : MonoBehaviour
 
         }
         tilemap.SetTile(tilemap.WorldToCell(hitPosition), null);
-    }
-
-    [PunRPC]
-    private void cannonBallShrink()
-    {
-        Vector3 newScale = Vector3.Lerp(Vector3.zero, Vector3.one, Mathf.Sin((Mathf.PI / 2) * (rb.velocity.magnitude / highestSpeed)));
-        if (float.IsNaN(newScale.x) || float.IsNaN(newScale.y) || float.IsNaN(newScale.z))
-        {
-            transform.localScale = Vector3.one;
-        }
-        else
-        {
-            Debug.Log(newScale);
-            transform.localScale = new Vector3(newScale.x, newScale.y, 1);
-            //transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, rb.velocity.magnitude / highestSpeed);
-        }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -25,7 +26,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 currentRotation;
     private Rigidbody2D rb;
     public GameObject[] cannonballSpawns;
-    public Canvas ourCanvas;
+    public Canvas HUDCanvas, PauseMenuCanvas;
+    public bool inPm = false;
 
 
     private Vector3 newPos;
@@ -57,14 +59,14 @@ public class PlayerMovement : MonoBehaviour
     {
         PV = GetComponent<PhotonView>();
         rb = gameObject.GetComponent<Rigidbody2D>();
-        ourCanvas = gameObject.GetComponentInChildren<Canvas>();
         health = initialHealth;
         cooldownTimeLeft = cannonCooldown; cooldownTimeRight = cannonCooldown;
         if (!PV.IsMine)
         {    
             Destroy(myCam);
             Destroy(myAL);
-            Destroy(ourCanvas.gameObject);
+            Destroy(HUDCanvas.gameObject);
+            Destroy(PauseMenuCanvas.gameObject);
         }
     }
 
@@ -82,53 +84,56 @@ public class PlayerMovement : MonoBehaviour
         rb.drag = Mathf.Abs(rb.velocity.magnitude * dragCoefficient);
         rb.angularDrag = Mathf.Abs(rb.angularVelocity * angularDragCoefficient);
         localForwardVelocity = Vector3.Dot(rb.velocity, transform.up);
-        if (Input.GetMouseButtonDown(0))
+        if (inPm == false)
         {
-            Vector3 mousePos = myCam.ScreenToWorldPoint(Input.mousePosition);
-            mousePos = new Vector3(mousePos.x, mousePos.y, 0);
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector3 mousePos = myCam.ScreenToWorldPoint(Input.mousePosition);
+                mousePos = new Vector3(mousePos.x, mousePos.y, 0);
 
-            if (Vector2.Distance(mousePos, cannonballSpawns[0].transform.position) < Vector2.Distance(mousePos, cannonballSpawns[1].transform.position))
-            {
-                if (canFireLeft)
+                if (Vector2.Distance(mousePos, cannonballSpawns[0].transform.position) < Vector2.Distance(mousePos, cannonballSpawns[1].transform.position))
                 {
-                    cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[0].transform.position, Quaternion.identity);
-                    canFireLeft = false;
-                    cooldownTimeLeft = 0;
-                    cannonballcooldownLeft.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownLeft.rectTransform.sizeDelta.y);
-                    cannonBall.transform.parent = gameObject.transform;
-                    shot = true;
+                    if (canFireLeft)
+                    {
+                        cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[0].transform.position, Quaternion.identity);
+                        canFireLeft = false;
+                        cooldownTimeLeft = 0;
+                        cannonballcooldownLeft.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownLeft.rectTransform.sizeDelta.y);
+                        cannonBall.transform.parent = gameObject.transform;
+                        shot = true;
+                    }
+                }
+                else
+                {
+                    if (canFireRight)
+                    {
+                        cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[1].transform.position, Quaternion.identity);
+                        canFireRight = false;
+                        cooldownTimeRight = 0;
+                        cannonballcooldownRight.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownRight.rectTransform.sizeDelta.y);
+                        cannonBall.transform.parent = gameObject.transform;
+                        shot = true;
+                    }
                 }
             }
-            else
+            if (Input.GetKey(KeyCode.W))
             {
-                if (canFireRight)
-                {
-                    cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[1].transform.position, Quaternion.identity);
-                    canFireRight = false;
-                    cooldownTimeRight = 0;
-                    cannonballcooldownRight.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownRight.rectTransform.sizeDelta.y);
-                    cannonBall.transform.parent = gameObject.transform;
-                    shot = true;
-                }
+                rb.AddRelativeForce(new Vector2(0, movementSpeed));
             }
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            rb.AddRelativeForce(new Vector2(0, movementSpeed));
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            rotSpeedPriv = rotSpeed * localForwardVelocity;
-            rb.AddTorque(rotSpeedPriv);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            rb.AddRelativeForce(new Vector2(0, -movementSpeed));
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            rotSpeedPriv = rotSpeed * localForwardVelocity;
-            rb.AddTorque(-rotSpeedPriv);
+            if (Input.GetKey(KeyCode.A))
+            {
+                rotSpeedPriv = rotSpeed * localForwardVelocity;
+                rb.AddTorque(rotSpeedPriv);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                rb.AddRelativeForce(new Vector2(0, -movementSpeed));
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                rotSpeedPriv = rotSpeed * localForwardVelocity;
+                rb.AddTorque(-rotSpeedPriv);
+            }
         }
         if (!canFireLeft)
         {
@@ -149,6 +154,10 @@ public class PlayerMovement : MonoBehaviour
                 canFireRight = true;
                 cooldownTimeRight = cannonCooldown;
             }
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            inPause();
         }
     }
 
@@ -199,4 +208,25 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(force);
     }
 
+    public void DisconnectPlayer()
+    {
+        PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene(0);
+    }
+
+    public void inPause()
+    {
+        if (inPm == false)
+        {
+            HUDCanvas.gameObject.SetActive(false);
+            PauseMenuCanvas.gameObject.SetActive(true);
+            inPm = true;
+        }
+        else
+        {
+            HUDCanvas.gameObject.SetActive(true);
+            PauseMenuCanvas.gameObject.SetActive(false);
+            inPm = false;
+        }
+    }
 }

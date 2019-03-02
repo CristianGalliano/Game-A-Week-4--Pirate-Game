@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 595}
   - component: {fileID: 594}
   - component: {fileID: 4494036367033733046}
-  - component: {fileID: 3195195760432010235}
+  - component: {fileID: 20514637279842752}
   m_Layer: 0
   m_Name: CannonBall
   m_TagString: CannonBall
@@ -155,7 +155,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 3195195760432010235}
+  - {fileID: 20514637279842752}
   - {fileID: 4494036367033733046}
   viewIdField: 0
   InstantiationId: 0
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
---- !u!114 &3195195760432010235
+--- !u!114 &20514637279842752
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -190,4 +190,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
+  m_SynchronizeScale: 1
