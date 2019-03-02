@@ -45,6 +45,8 @@ public class PlayerMovement : MonoBehaviour
 
     public PolygonCollider2D limiter;
 
+    public Image cannonballcooldown;
+
 
     // Start is called before the first frame update
     void Start()
@@ -93,6 +95,7 @@ public class PlayerMovement : MonoBehaviour
                 cannonBall.transform.parent = gameObject.transform;
                 shot = true;
                 canFire = false;
+                cannonballcooldown.rectTransform.sizeDelta = new Vector2(0, cannonballcooldown.rectTransform.sizeDelta.y);
                 if (PV.IsMine)
                     StartCoroutine(CannonCooldown());
             }

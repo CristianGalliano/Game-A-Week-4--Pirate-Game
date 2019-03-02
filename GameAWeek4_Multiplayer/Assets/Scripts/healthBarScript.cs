@@ -16,10 +16,10 @@ public class healthBarScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        scaleUI();
+        scaleHealthUI();
     }
 
-    private void scaleUI()
+    private void scaleHealthUI()
     {
         healthbarImage.rectTransform.sizeDelta = new Vector2(player.health * 10, healthbarImage.rectTransform.sizeDelta.y);
     }
