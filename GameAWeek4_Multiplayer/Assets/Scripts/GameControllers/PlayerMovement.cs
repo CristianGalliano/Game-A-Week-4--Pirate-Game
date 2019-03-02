@@ -35,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
     public AudioListener myAL;
 
     private GameObject cannonBall;
+    private bool canFire = true;
+    public float cannonCooldown;
 
     private bool shot = false;
     private int ID;
@@ -75,19 +77,25 @@ public class PlayerMovement : MonoBehaviour
         localForwardVelocity = Vector3.Dot(rb.velocity, transform.up);
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 mousePos = myCam.ScreenToWorldPoint(Input.mousePosition);
-            mousePos = new Vector3(mousePos.x, mousePos.y, 0);
+            if (canFire)
+            {
+                Vector3 mousePos = myCam.ScreenToWorldPoint(Input.mousePosition);
+                mousePos = new Vector3(mousePos.x, mousePos.y, 0);
 
-            if (Vector2.Distance(mousePos, cannonballSpawns[0].transform.position) < Vector2.Distance(mousePos, cannonballSpawns[1].transform.position))
-            {
-                cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[0].transform.position, Quaternion.identity);
+                if (Vector2.Distance(mousePos, cannonballSpawns[0].transform.position) < Vector2.Distance(mousePos, cannonballSpawns[1].transform.position))
+                {
+                    cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[0].transform.position, Quaternion.identity);
+                }
+                else
+                {
+                    cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[1].transform.position, Quaternion.identity);
+                }
+                cannonBall.transform.parent = gameObject.transform;
+                shot = true;
+                canFire = false;
+                if (PV.IsMine)
+                    StartCoroutine(CannonCooldown());
             }
-            else
-            {
-                cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[1].transform.position, Quaternion.identity);
-            }
-            cannonBall.transform.parent = gameObject.transform;
-            shot = true;
         }
         if (Input.GetKey(KeyCode.W))
         {
@@ -154,5 +162,11 @@ public class PlayerMovement : MonoBehaviour
     private void RPC_AddForce(Vector2 force)
     {
         rb.AddForce(force);
+    }
+
+    IEnumerator CannonCooldown()
+    {
+        yield return new WaitForSeconds(cannonCooldown);
+        canFire = true;
     }
 }

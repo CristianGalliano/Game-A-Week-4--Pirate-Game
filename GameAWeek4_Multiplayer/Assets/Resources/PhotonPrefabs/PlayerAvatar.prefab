@@ -82,7 +82,7 @@ MonoBehaviour:
   initialHealth: 100
   health: 0
   landDamageMultiplier: 10
-  landBounceMultiplier: 50
+  landBounceMultiplier: 150
   cannonballDamageMultiplier: 2
   cannonballBounceMultiplier: 10
   boatDamageMultiplier: 10
@@ -97,6 +97,7 @@ MonoBehaviour:
   ourCanvas: {fileID: 0}
   myCam: {fileID: 437}
   myAL: {fileID: 559}
+  cannonCooldown: 2
   localForwardVelocity: 0
   limiter: {fileID: 0}
 --- !u!212 &573
@@ -1675,7 +1676,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 49.999878, y: 50.00003}
+  m_AnchoredPosition: {x: 49.999756, y: 50}
   m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &7502466805137260999

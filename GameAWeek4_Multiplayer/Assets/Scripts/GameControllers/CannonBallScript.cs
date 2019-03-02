@@ -12,6 +12,7 @@ public class CannonBallScript : MonoBehaviour
     private Vector3 originalPos;
     private Vector3 direction;
     private Rigidbody2D rb;
+    private float highestSpeed = 0;
     public float speed;
     public float stopSpeed;
     private Camera cam;
@@ -49,6 +50,9 @@ public class CannonBallScript : MonoBehaviour
     {
         if (PV.IsMine)
         {
+            if (rb.velocity.magnitude > highestSpeed)
+                highestSpeed = rb.velocity.magnitude;
+            transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, Mathf.Sin((Mathf.PI / 2)*(rb.velocity.magnitude / highestSpeed)));
             if (rb.velocity.magnitude < stopSpeed && rb.velocity.magnitude != 0)
             {
                 PhotonNetwork.Destroy(gameObject);
