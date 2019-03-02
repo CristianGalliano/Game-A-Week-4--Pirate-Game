@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
 {
@@ -25,6 +26,10 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
     private float lessThanMaxPlayers;
     private float atMaxPlayers;
     private float timeToStart;
+    public int playersToStart;
+
+    public Text roominfoText;
+    public Text timerText;
 
     private void Awake()
     {
@@ -73,7 +78,7 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
     {
         if (MultiplayerSettings.multiplayerSettings.delayStart)
         {
-            if (playersInRoom == 1)
+            if (playersInRoom < playersToStart)
             {
                 RestartTimer();
             }
@@ -87,14 +92,17 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
                 }
                 else if (readyToCount)
                 {
+                    timerText.gameObject.SetActive(true);
                     lessThanMaxPlayers -= Time.deltaTime;
                     timeToStart = lessThanMaxPlayers;
+                    timerText.text = Mathf.Floor(timeToStart+1).ToString() + "!";
                 }
                 Debug.Log("Display time to start to the players:" + timeToStart);
                 if (timeToStart <= 0)
                 {
                     StartGame();
                 }
+                roominfoText.text = playersInRoom + "/" + playersToStart + " Players Connected!";
             }
         }
     }
@@ -142,7 +150,7 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
         if (MultiplayerSettings.multiplayerSettings.delayStart)
         {
             Debug.Log("Display players in room out of max players possible(" + playersInRoom + ":" + MultiplayerSettings.multiplayerSettings.maxPlayers + ")");
-            if (playersInRoom > 1)
+            if (playersInRoom == playersToStart)
             {
                 readyToCount = true;
             }

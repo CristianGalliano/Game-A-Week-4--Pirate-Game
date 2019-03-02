@@ -3,12 +3,16 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PhotonLobby : MonoBehaviourPunCallbacks
 {
     public static PhotonLobby lobby;
     public GameObject battlebutton;
     public GameObject cancelButton;
+    public GameObject connectingobject;
+    public GameObject exitButton;
+    public Text lobbyInfoText;
 
     private void Awake()
     {
@@ -26,14 +30,23 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
         Debug.Log("Player Connected");
         PhotonNetwork.AutomaticallySyncScene = true;
         battlebutton.SetActive(true);
+        exitButton.SetActive(true);
+        connectingobject.SetActive(false);     
     }
 
     public void OnBattleButtonClicked()
     {
         Debug.Log("Battle button was clicked");
         battlebutton.SetActive(false);
-        cancelButton.SetActive(true);
+        exitButton.SetActive(false);
+        cancelButton.SetActive(true);       
         PhotonNetwork.JoinRandomRoom();
+        lobbyInfoText.gameObject.SetActive(true);
+    }
+
+    public void OnExitButtonClicked()
+    {
+        Application.Quit();
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -66,6 +79,8 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
         Debug.Log("Cancel button clicked");
         cancelButton.SetActive(false);
         battlebutton.SetActive(true);
+        exitButton.SetActive(true);
+        lobbyInfoText.gameObject.SetActive(false);
         PhotonNetwork.LeaveRoom();
     }
 
