@@ -67,3 +67,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myAvatar: {fileID: 0}
+  spawnBoundLeft: -66
+  spawnBoundRight: 161
+  spawnBoundUp: 140
+  spawnBoundDown: -70
+  spawnZoneSize: 30
