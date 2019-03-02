@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 currentRotation;
     private Rigidbody2D rb;
     public GameObject[] cannonballSpawns;
+    public Canvas ourCanvas;
 
 
     private Vector3 newPos;
@@ -47,12 +49,13 @@ public class PlayerMovement : MonoBehaviour
     {
         PV = GetComponent<PhotonView>();
         rb = gameObject.GetComponent<Rigidbody2D>();
+        ourCanvas = gameObject.GetComponentInChildren<Canvas>();
         health = initialHealth;
         if (!PV.IsMine)
         {    
             Destroy(myCam);
             Destroy(myAL);
-            
+            Destroy(ourCanvas.gameObject);
         }
     }
 
@@ -128,8 +131,10 @@ public class PlayerMovement : MonoBehaviour
         {
             if (PV.IsMine)
             {
-                PV.RPC("DealDamage", RpcTarget.All, (rb.velocity.magnitude * boatDamageMultiplier));
-                PV.RPC("RPC_AddForce", RpcTarget.All, (-rb.velocity * boatBounceMultiplier));
+                Rigidbody2D enemyRB = collision.collider.GetComponent<Rigidbody2D>();
+                Vector3 velocityDifference = enemyRB.velocity - rb.velocity;
+                PV.RPC("DealDamage", RpcTarget.All, (Mathf.Abs(velocityDifference.magnitude) * boatDamageMultiplier));
+                PV.RPC("RPC_AddForce", RpcTarget.All, (enemyRB.velocity * boatBounceMultiplier));
             }
         }
     }
