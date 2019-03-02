@@ -35,8 +35,11 @@ public class PlayerMovement : MonoBehaviour
     public AudioListener myAL;
 
     private GameObject cannonBall;
-    private bool canFire = true;
     public float cannonCooldown;
+    private float cooldownTimeLeft;
+    private float cooldownTimeRight;
+    private bool canFireLeft = true;
+    private bool canFireRight = true;
 
     private bool shot = false;
     private int ID;
@@ -45,7 +48,8 @@ public class PlayerMovement : MonoBehaviour
 
     public PolygonCollider2D limiter;
 
-    public Image cannonballcooldown;
+    public Image cannonballcooldownLeft;
+    public Image cannonballcooldownRight;
 
 
     // Start is called before the first frame update
@@ -55,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         ourCanvas = gameObject.GetComponentInChildren<Canvas>();
         health = initialHealth;
+        cooldownTimeLeft = cannonCooldown; cooldownTimeRight = cannonCooldown;
         if (!PV.IsMine)
         {    
             Destroy(myCam);
@@ -79,25 +84,32 @@ public class PlayerMovement : MonoBehaviour
         localForwardVelocity = Vector3.Dot(rb.velocity, transform.up);
         if (Input.GetMouseButtonDown(0))
         {
-            if (canFire)
-            {
-                Vector3 mousePos = myCam.ScreenToWorldPoint(Input.mousePosition);
-                mousePos = new Vector3(mousePos.x, mousePos.y, 0);
+            Vector3 mousePos = myCam.ScreenToWorldPoint(Input.mousePosition);
+            mousePos = new Vector3(mousePos.x, mousePos.y, 0);
 
-                if (Vector2.Distance(mousePos, cannonballSpawns[0].transform.position) < Vector2.Distance(mousePos, cannonballSpawns[1].transform.position))
+            if (Vector2.Distance(mousePos, cannonballSpawns[0].transform.position) < Vector2.Distance(mousePos, cannonballSpawns[1].transform.position))
+            {
+                if (canFireLeft)
                 {
                     cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[0].transform.position, Quaternion.identity);
+                    canFireLeft = false;
+                    cooldownTimeLeft = 0;
+                    cannonballcooldownLeft.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownLeft.rectTransform.sizeDelta.y);
+                    cannonBall.transform.parent = gameObject.transform;
+                    shot = true;
                 }
-                else
+            }
+            else
+            {
+                if (canFireRight)
                 {
                     cannonBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "CannonBall"), cannonballSpawns[1].transform.position, Quaternion.identity);
+                    canFireRight = false;
+                    cooldownTimeRight = 0;
+                    cannonballcooldownRight.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownRight.rectTransform.sizeDelta.y);
+                    cannonBall.transform.parent = gameObject.transform;
+                    shot = true;
                 }
-                cannonBall.transform.parent = gameObject.transform;
-                shot = true;
-                canFire = false;
-                cannonballcooldown.rectTransform.sizeDelta = new Vector2(0, cannonballcooldown.rectTransform.sizeDelta.y);
-                if (PV.IsMine)
-                    StartCoroutine(CannonCooldown());
             }
         }
         if (Input.GetKey(KeyCode.W))
@@ -117,6 +129,26 @@ public class PlayerMovement : MonoBehaviour
         {
             rotSpeedPriv = rotSpeed * localForwardVelocity;
             rb.AddTorque(-rotSpeedPriv);
+        }
+        if (!canFireLeft)
+        {
+            cooldownTimeLeft += Time.deltaTime;
+            cannonballcooldownLeft.rectTransform.sizeDelta = new Vector2(Mathf.Lerp(0, 1000, cooldownTimeLeft / cannonCooldown), cannonballcooldownLeft.rectTransform.sizeDelta.y);
+            if (cooldownTimeLeft > cannonCooldown)
+            {
+                canFireLeft = true;
+                cooldownTimeLeft = cannonCooldown;
+            }
+        }
+        if (!canFireRight)
+        {
+            cooldownTimeRight += Time.deltaTime;
+            cannonballcooldownRight.rectTransform.sizeDelta = new Vector2(Mathf.Lerp(0, 1000, cooldownTimeRight / cannonCooldown), cannonballcooldownRight.rectTransform.sizeDelta.y);
+            if (cooldownTimeRight > cannonCooldown)
+            {
+                canFireRight = true;
+                cooldownTimeRight = cannonCooldown;
+            }
         }
     }
 
@@ -167,9 +199,4 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(force);
     }
 
-    IEnumerator CannonCooldown()
-    {
-        yield return new WaitForSeconds(cannonCooldown);
-        canFire = true;
-    }
 }
