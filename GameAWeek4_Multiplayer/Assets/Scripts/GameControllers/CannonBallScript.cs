@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class CannonBallScript : MonoBehaviour
 {
@@ -15,10 +16,15 @@ public class CannonBallScript : MonoBehaviour
     public float stopSpeed;
     private Camera cam;
 
+    Vector2 hitPosition = Vector2.zero;
+    public Tilemap tilemap;
+    Collision2D collision1;
+
     // Start is called before the first frame update
     void Start()
     {
         PV = GetComponent<PhotonView>();
+        tilemap = GameObject.Find("Land").GetComponent<Tilemap>();
         if (PV.IsMine)
         {
             cam = gameObject.transform.parent.transform.Find("Camera").GetComponent<Camera>();
@@ -44,7 +50,33 @@ public class CannonBallScript : MonoBehaviour
         if (PV.IsMine)
         {
             if (rb.velocity.magnitude < stopSpeed && rb.velocity.magnitude != 0)
+            {
                 PhotonNetwork.Destroy(gameObject);
+            }
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Land")
+        {
+
+            tilemap = collision.collider.GetComponent<Tilemap>();
+            collision1 = collision;
+            PV.RPC("removeTile", RpcTarget.All);
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
+
+    [PunRPC]
+    private void removeTile()
+    {
+        foreach (ContactPoint2D hit in collision1.contacts)
+        {
+            hitPosition.x = hit.point.x - 0.01f * hit.normal.x;
+            hitPosition.y = hit.point.y - 0.01f * hit.normal.y;
+
+        }
+        tilemap.SetTile(tilemap.WorldToCell(hitPosition), null);
     }
 }
