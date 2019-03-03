@@ -81,8 +81,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerID: 0
-  playerName: 
-  timeAlive: 0
   initialHealth: 100
   health: 0
   landDamageMultiplier: 10

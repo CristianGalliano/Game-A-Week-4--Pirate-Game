@@ -10,8 +10,6 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     public int playerID;
-    public string playerName;
-    public float timeAlive = 0;
     public float initialHealth;
     public float health;
     public float landDamageMultiplier;
@@ -98,7 +96,6 @@ public class PlayerMovement : MonoBehaviour
         rb.drag = Mathf.Abs(rb.velocity.magnitude * dragCoefficient);
         rb.angularDrag = Mathf.Abs(rb.angularVelocity * angularDragCoefficient);
         localForwardVelocity = Vector3.Dot(rb.velocity, transform.up);
-        timeAlive += Time.deltaTime;
         if (inPm == false)
         {
             if (Input.GetMouseButtonDown(0))
