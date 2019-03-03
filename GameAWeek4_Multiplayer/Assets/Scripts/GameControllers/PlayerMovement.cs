@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
                         cannonballcooldownLeft.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownLeft.rectTransform.sizeDelta.y);
                         cannonBall.transform.parent = gameObject.transform;
                         shot = true;
-                        thisAudiosource.PlayOneShot(clips[0]);
+                        PV.RPC("PlayCannonSound", RpcTarget.All);
                     }
                 }
                 else
@@ -120,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
                         cannonballcooldownRight.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownRight.rectTransform.sizeDelta.y);
                         cannonBall.transform.parent = gameObject.transform;
                         shot = true;
-                        thisAudiosource.PlayOneShot(clips[0]);
+                        PV.RPC("PlayCannonSound", RpcTarget.All);
                     }
                 }
             }
@@ -252,5 +252,11 @@ public class PlayerMovement : MonoBehaviour
     public void WinGame()
     {
         //add code for winning here
+    }
+
+    [PunRPC]
+    private void PlayCannonSound()
+    {
+        thisAudiosource.PlayOneShot(clips[0]);
     }
 }
