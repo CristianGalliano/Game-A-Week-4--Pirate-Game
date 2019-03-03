@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     public bool inPm = false;
     public AudioClip[] clips;
     public AudioSource thisAudiosource;
+    private bool playSound = false;
 
 
     private Vector3 newPos;
@@ -83,6 +84,11 @@ public class PlayerMovement : MonoBehaviour
         {
             BasicMovement();
         }
+        if (playSound == true)
+        {
+            PV.RPC("PlayCannonSound", RpcTarget.All);
+            playSound = false;
+        }
     }
 
     private void BasicMovement()
@@ -107,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
                         cannonballcooldownLeft.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownLeft.rectTransform.sizeDelta.y);
                         cannonBall.transform.parent = gameObject.transform;
                         shot = true;
-                        PV.RPC("PlayCannonSound", RpcTarget.All);
+                        playSound = true;
                     }
                 }
                 else
@@ -120,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
                         cannonballcooldownRight.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownRight.rectTransform.sizeDelta.y);
                         cannonBall.transform.parent = gameObject.transform;
                         shot = true;
-                        PV.RPC("PlayCannonSound", RpcTarget.All);
+                        playSound = true;
                     }
                 }
             }
@@ -220,6 +226,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void DisconnectPlayer()
     {
+        Destroy(PhotonRoom.room.gameObject);
         StartCoroutine(DisconnectAndLoad());
     }
 
