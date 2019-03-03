@@ -275,8 +275,9 @@ public class PlayerMovement : MonoBehaviour
         thisAudiosource = gameObject.AddComponent<AudioSource>();
         thisAudiosource.clip = clips[0];
         thisAudiosource.volume = 0.25f;
+        thisAudiosource.rolloffMode = AudioRolloffMode.Linear;
         thisAudiosource.spatialBlend = 1;
-        thisAudiosource.maxDistance = 30;
+        thisAudiosource.maxDistance = 100;
         thisAudiosource.minDistance = 1;
     }
 }
