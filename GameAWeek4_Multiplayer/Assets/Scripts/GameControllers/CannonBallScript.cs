@@ -16,6 +16,7 @@ public class CannonBallScript : MonoBehaviour
     public float speed;
     public float stopSpeed;
     private Camera cam;
+    private Vector3 newScale;
 
     Vector2 hitPosition = Vector2.zero;
     public Tilemap tilemap;
@@ -56,8 +57,9 @@ public class CannonBallScript : MonoBehaviour
             {
                 PhotonNetwork.Destroy(gameObject);
             }
+            newScale = Vector3.Lerp(Vector3.zero, Vector3.one, Mathf.Sin((Mathf.PI / 2) * (rb.velocity.magnitude / highestSpeed)));
         }
-        Vector3 newScale = Vector3.Lerp(Vector3.zero, Vector3.one, Mathf.Sin((Mathf.PI / 2) * (rb.velocity.magnitude / highestSpeed)));
+        
         if (float.IsNaN(newScale.x) || float.IsNaN(newScale.y) || float.IsNaN(newScale.z))
         {
             transform.localScale = Vector3.one;
@@ -74,11 +76,13 @@ public class CannonBallScript : MonoBehaviour
     {
         if (collision.collider.tag == "Land")
         {
-
             tilemap = collision.collider.GetComponent<Tilemap>();
             collision1 = collision;
-            PV.RPC("removeTile", RpcTarget.All);
-            PhotonNetwork.Destroy(gameObject);
+            if (PV.IsMine)
+            {
+                PV.RPC("removeTile", RpcTarget.All);
+                PhotonNetwork.Destroy(gameObject);
+            }
         }
     }
 
