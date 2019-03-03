@@ -80,6 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82316b7012bc8154581a5f2fa1624bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerID: 0
   initialHealth: 100
   health: 0
   landDamageMultiplier: 10

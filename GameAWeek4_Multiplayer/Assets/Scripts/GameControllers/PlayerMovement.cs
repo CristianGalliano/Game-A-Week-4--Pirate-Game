@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public int playerID;
     public float initialHealth;
     public float health;
     public float landDamageMultiplier;
@@ -57,6 +58,9 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerID = Random.Range(0, int.MaxValue);
+        GameSetup.GS.playerIDList.Add(playerID);
+        GameSetup.GS.livingPlayers.Add(gameObject);
         PV = GetComponent<PhotonView>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         health = initialHealth;
@@ -198,6 +202,8 @@ public class PlayerMovement : MonoBehaviour
         health -= damage;
         if (health <= 0)
         {
+            GameSetup.GS.RemovePlayer(playerID);
+            //ADD CODE FOR GAME LOSE HERE
             PhotonNetwork.Destroy(gameObject);
         }
     }
@@ -228,5 +234,10 @@ public class PlayerMovement : MonoBehaviour
             PauseMenuCanvas.gameObject.SetActive(false);
             inPm = false;
         }
+    }
+
+    public void WinGame()
+    {
+        //add code for winning here
     }
 }
