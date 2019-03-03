@@ -56,6 +56,7 @@ public class CannonBallScript : MonoBehaviour
             {
                 PhotonNetwork.Destroy(gameObject);
             }
+
         }
         Vector3 newScale = Vector3.Lerp(Vector3.zero, Vector3.one, Mathf.Sin((Mathf.PI / 2) * (rb.velocity.magnitude / highestSpeed)));
         if (float.IsNaN(newScale.x) || float.IsNaN(newScale.y) || float.IsNaN(newScale.z))
@@ -78,7 +79,10 @@ public class CannonBallScript : MonoBehaviour
             tilemap = collision.collider.GetComponent<Tilemap>();
             collision1 = collision;
             PV.RPC("removeTile", RpcTarget.All);
-            PhotonNetwork.Destroy(gameObject);
+            if (gameObject != null)
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
         }
     }
 
