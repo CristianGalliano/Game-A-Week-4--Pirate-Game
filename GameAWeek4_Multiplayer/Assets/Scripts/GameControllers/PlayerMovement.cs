@@ -84,11 +84,6 @@ public class PlayerMovement : MonoBehaviour
         {
             BasicMovement();
         }
-        if (playSound == true)
-        {
-            PV.RPC("PlayCannonSound", RpcTarget.All);
-            playSound = false;
-        }
     }
 
     private void BasicMovement()
@@ -114,6 +109,7 @@ public class PlayerMovement : MonoBehaviour
                         cannonBall.transform.parent = gameObject.transform;
                         shot = true;
                         playSound = true;
+                        PV.RPC("PlayCannonSound", RpcTarget.All);
                     }
                 }
                 else
@@ -127,6 +123,7 @@ public class PlayerMovement : MonoBehaviour
                         cannonBall.transform.parent = gameObject.transform;
                         shot = true;
                         playSound = true;
+                        PV.RPC("PlayCannonSound", RpcTarget.All);
                     }
                 }
             }
@@ -264,6 +261,8 @@ public class PlayerMovement : MonoBehaviour
     [PunRPC]
     private void PlayCannonSound()
     {
-        thisAudiosource.PlayOneShot(clips[0]);
+        thisAudiosource = gameObject.AddComponent<AudioSource>();
+        thisAudiosource.clip = clips[0];
+        thisAudiosource.Play();
     }
 }
