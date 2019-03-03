@@ -75,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
             Destroy(HUDCanvas.gameObject);
             Destroy(PauseMenuCanvas.gameObject);
         }
-        else
+        if (thisAudiosource == null)
         {
             PV.RPC("AddAS", RpcTarget.All);
         }
