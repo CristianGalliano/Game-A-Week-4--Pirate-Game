@@ -29,6 +29,8 @@ public class PlayerMovement : MonoBehaviour
     public GameObject[] cannonballSpawns;
     public Canvas HUDCanvas, PauseMenuCanvas;
     public bool inPm = false;
+    public AudioClip[] clips;
+    public AudioSource thisAudiosource;
 
 
     private Vector3 newPos;
@@ -105,6 +107,7 @@ public class PlayerMovement : MonoBehaviour
                         cannonballcooldownLeft.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownLeft.rectTransform.sizeDelta.y);
                         cannonBall.transform.parent = gameObject.transform;
                         shot = true;
+                        thisAudiosource.PlayOneShot(clips[0]);
                     }
                 }
                 else
@@ -117,6 +120,7 @@ public class PlayerMovement : MonoBehaviour
                         cannonballcooldownRight.rectTransform.sizeDelta = new Vector2(0, cannonballcooldownRight.rectTransform.sizeDelta.y);
                         cannonBall.transform.parent = gameObject.transform;
                         shot = true;
+                        thisAudiosource.PlayOneShot(clips[0]);
                     }
                 }
             }
@@ -216,8 +220,17 @@ public class PlayerMovement : MonoBehaviour
 
     public void DisconnectPlayer()
     {
+        StartCoroutine(DisconnectAndLoad());
+    }
+
+    IEnumerator DisconnectAndLoad()
+    {
         PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene(0);
+        while (PhotonNetwork.InRoom)
+        {
+            yield return null;
+        }
+        SceneManager.LoadScene(MultiplayerSettings.multiplayerSettings.menuScene);
     }
 
     public void inPause()
