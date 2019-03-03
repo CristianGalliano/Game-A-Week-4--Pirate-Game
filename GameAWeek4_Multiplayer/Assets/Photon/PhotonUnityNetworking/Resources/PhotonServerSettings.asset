@@ -42,5 +42,6 @@ MonoBehaviour:
   - removeTile
   - cannonBallShrink
   - PlayCannonSound
+  - AddAS
   DisableAutoOpenWizard: 1
   ShowSettings: 1

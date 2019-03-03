@@ -69,12 +69,17 @@ public class PlayerMovement : MonoBehaviour
         health = initialHealth;
         cooldownTimeLeft = cannonCooldown; cooldownTimeRight = cannonCooldown;
         if (!PV.IsMine)
-        {    
+        {
             Destroy(myCam);
             Destroy(myAL);
             Destroy(HUDCanvas.gameObject);
             Destroy(PauseMenuCanvas.gameObject);
         }
+        else
+        {
+            PV.RPC("AddAS", RpcTarget.All);
+        }
+
     }
 
     // Update is called once per frame
@@ -261,8 +266,14 @@ public class PlayerMovement : MonoBehaviour
     [PunRPC]
     private void PlayCannonSound()
     {
+        thisAudiosource.Play();
+    }
+
+    [PunRPC]
+    private void AddAS()
+    {
         thisAudiosource = gameObject.AddComponent<AudioSource>();
         thisAudiosource.clip = clips[0];
-        thisAudiosource.Play();
+        thisAudiosource.volume = 0.25f;
     }
 }
