@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 579}
   - component: {fileID: 679}
   - component: {fileID: 691}
+  - component: {fileID: 5602174883577715773}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Boat
@@ -103,7 +104,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2adbf19ea567e1443b6498c1f27f9798, type: 3}
   thisAudiosource: {fileID: 0}
   myCam: {fileID: 459}
-  myAL: {fileID: 582}
+  myAL: {fileID: 5602174883577715773}
   cannonCooldown: 3.5
   localForwardVelocity: 0
   limiter: {fileID: 0}
@@ -358,6 +359,14 @@ MonoBehaviour:
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0
+--- !u!81 &5602174883577715773
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136}
+  m_Enabled: 1
 --- !u!1 &137
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +377,6 @@ GameObject:
   m_Component:
   - component: {fileID: 310}
   - component: {fileID: 459}
-  - component: {fileID: 582}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -432,14 +440,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &582
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137}
-  m_Enabled: 1
 --- !u!1 &138
 GameObject:
   m_ObjectHideFlags: 0
