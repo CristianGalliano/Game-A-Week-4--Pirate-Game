@@ -43,5 +43,6 @@ MonoBehaviour:
   - cannonBallShrink
   - PlayCannonSound
   - AddAS
+  - UpdateWinnerText
   DisableAutoOpenWizard: 1
   ShowSettings: 1

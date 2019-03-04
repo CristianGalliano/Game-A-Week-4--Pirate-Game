@@ -24,7 +24,6 @@ public class LoserScript : MonoBehaviour
         {
             if (Camera.current != null)
             {
-                Debug.Log(Camera.current.Equals(endgamecam));
                 if (Camera.current.Equals(endgamecam))
                 {
                     showUI = true;
@@ -57,6 +56,7 @@ public class LoserScript : MonoBehaviour
     public void DisconnectPlayer()
     {
         Destroy(PhotonRoom.room.gameObject);
+        Destroy(GameSetup.GS.gameObject);
         StartCoroutine(DisconnectAndLoad());
     }
 

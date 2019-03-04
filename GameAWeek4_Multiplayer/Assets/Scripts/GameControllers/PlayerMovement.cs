@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     public int playerID;
+    public string playerNickname = "";
+    public float timeAlive = 0;
     public float initialHealth;
     public float health;
     public float landDamageMultiplier;
@@ -88,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
         if (PV.IsMine)
         {
             BasicMovement();
+            timeAlive += Time.deltaTime;
         }
     }
 
@@ -192,7 +195,6 @@ public class PlayerMovement : MonoBehaviour
             Rigidbody2D cannonBallRB = collision.collider.GetComponent<Rigidbody2D>();
             PV.RPC("DealDamage",RpcTarget.All,(cannonBallRB.velocity.magnitude * cannonballDamageMultiplier));
             PV.RPC("RPC_AddForce", RpcTarget.All,(cannonBallRB.velocity * cannonballBounceMultiplier));
-            Debug.Log("test");
             PhotonNetwork.Destroy(cannonBallRB.gameObject);
         }
         if (collision.collider.tag == "Boat")
@@ -228,7 +230,9 @@ public class PlayerMovement : MonoBehaviour
 
     public void DisconnectPlayer()
     {
+        GameSetup.GS.RemovePlayer(playerID);
         Destroy(PhotonRoom.room.gameObject);
+        Destroy(GameSetup.GS.gameObject);
         StartCoroutine(DisconnectAndLoad());
     }
 
