@@ -28,6 +28,7 @@ public class healthBarScript : MonoBehaviour
     public void onNickNameEntered()
     {
         player.playerNickname = nicknameInput.text;
+        GameSetup.GS.AddPlayerNickname(player.playerID);
         nicknameInput.gameObject.SetActive(false);
     }
 }

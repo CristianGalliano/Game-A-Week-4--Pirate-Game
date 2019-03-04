@@ -66,6 +66,8 @@ public class PlayerMovement : MonoBehaviour
         playerID = Random.Range(0, int.MaxValue);
         GameSetup.GS.playerIDList.Add(playerID);
         GameSetup.GS.livingPlayers.Add(gameObject);
+        GameSetup.GS.namesList.Add("Player " + playerID.ToString().Substring(0,3));
+        GameSetup.GS.timesList.Add(0);
         PV = GetComponent<PhotonView>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         health = initialHealth;

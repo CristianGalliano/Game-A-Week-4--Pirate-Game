@@ -37,8 +37,7 @@ public class PhotonPlayer : MonoBehaviour
             count++;
         }
         Vector3 spawnPoint = new Vector3(spawnPointX, spawnPointY, 0);
-        Vector3 mapCentre = new Vector3((spawnBoundRight - spawnBoundLeft) / 2, (spawnBoundUp - spawnBoundDown) / 2, 0);
-        Vector3 vectorToTarget = mapCentre - spawnPoint;
+        Vector3 vectorToTarget = Vector3.zero - spawnPoint;
         float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg - 90;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
         if (PV.IsMine)
