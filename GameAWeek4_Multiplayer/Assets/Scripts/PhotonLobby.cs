@@ -13,6 +13,9 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     public GameObject connectingobject;
     public GameObject exitButton;
     public Text lobbyInfoText;
+    public bool addedNickname = false;
+    public InputField nicknameInput;
+    public string nickName = "";
 
     private void Awake()
     {
@@ -29,7 +32,8 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     {
         Debug.Log("Player Connected");
         PhotonNetwork.AutomaticallySyncScene = true;
-        battlebutton.SetActive(true);
+        battlebutton.SetActive(false);
+        nicknameInput.gameObject.SetActive(true);
         exitButton.SetActive(true);
         connectingobject.SetActive(false);     
     }
@@ -88,5 +92,12 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     void Update()
     {
         
+    }
+
+    public void OnNicknameEntered()
+    {
+        nickName = nicknameInput.text;
+        nicknameInput.gameObject.SetActive(false);
+        battlebutton.SetActive(true);
     }
 }

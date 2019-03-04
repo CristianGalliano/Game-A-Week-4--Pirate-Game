@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class WinnerScript : MonoBehaviour
@@ -26,5 +28,22 @@ public class WinnerScript : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void DisconnectPlayer()
+    {
+        Destroy(PhotonRoom.room.gameObject);
+        Destroy(GameSetup.GS.gameObject);
+        StartCoroutine(DisconnectAndLoad());
+    }
+
+    IEnumerator DisconnectAndLoad()
+    {
+        PhotonNetwork.LeaveRoom();
+        while (PhotonNetwork.InRoom)
+        {
+            yield return null;
+        }
+        SceneManager.LoadScene(MultiplayerSettings.multiplayerSettings.menuScene);
     }
 }
