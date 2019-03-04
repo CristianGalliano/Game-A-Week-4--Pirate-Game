@@ -7,6 +7,7 @@ public class healthBarScript : MonoBehaviour
 {
     public PlayerMovement player;
     public Image healthbarImage;
+    public InputField nicknameInput;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,4 +24,11 @@ public class healthBarScript : MonoBehaviour
     {
         healthbarImage.rectTransform.sizeDelta = new Vector2(player.health * 10, healthbarImage.rectTransform.sizeDelta.y);
     }
+
+    public void onNickNameEntered()
+    {
+        player.playerNickname = nicknameInput.text;
+        nicknameInput.gameObject.SetActive(false);
+    }
 }
+
