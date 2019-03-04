@@ -1275,7 +1275,7 @@ MonoBehaviour:
   myNumberInRoom: 0
   playersInGame: 0
   startingTime: 10
-  playersToStart: 3
+  playersToStart: 6
   roominfoText: {fileID: 1819976001}
   timerText: {fileID: 40780287}
 --- !u!4 &1648059459
