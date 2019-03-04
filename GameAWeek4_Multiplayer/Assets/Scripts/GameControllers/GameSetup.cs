@@ -9,7 +9,8 @@ public class GameSetup : MonoBehaviour
     public Transform[] spawnpoints;
     public List<int> playerIDList;
     public List<GameObject> livingPlayers;
-    private bool canWinFlag = false;
+    [HideInInspector]
+    public bool canWinFlag = false;
 
     private void OnEnable()
     {
