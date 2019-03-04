@@ -659,7 +659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 901f635fe9be03c4ba5a1c6f9b3bd9b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayStart: 0
+  delayStart: 1
   maxPlayers: 10
   menuScene: 0
   multiplayerScene: 1
@@ -1274,7 +1274,7 @@ MonoBehaviour:
   playersInRoom: 0
   myNumberInRoom: 0
   playersInGame: 0
-  startingTime: 5
+  startingTime: 10
   playersToStart: 3
   roominfoText: {fileID: 1819976001}
   timerText: {fileID: 40780287}
